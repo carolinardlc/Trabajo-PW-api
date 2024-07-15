@@ -1,7 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS public;
 
-GRANT ALL PRIVILEGES ON SCHEMA public TO personal;
-
 create TABLE carrito (
     id SERIAL PRIMARY KEY
 );

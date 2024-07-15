@@ -1,6 +1,6 @@
 CREATE SCHEMA IF NOT EXISTS public;
 
-create TABLE IF NOT EXISTS carrito (
+CREATE TABLE IF NOT EXISTS carrito (
     id SERIAL PRIMARY KEY
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS producto (
     -- CONSTRAINT fk_serie FOREIGN KEY(serie_id) REFERENCES serie(id)
 );
 
-CREATE TABLE carrito_items (
+CREATE TABLE IF NOT EXISTS carrito_items (
     id SERIAL PRIMARY KEY,
     carrito_id INT NOT NULL,
     producto_id INT NOT NULL,

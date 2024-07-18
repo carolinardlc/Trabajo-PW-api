@@ -28,11 +28,11 @@ function findOne(req, res) {
 
 function update(req, res) {
   const id = parseInt(req.params.id);
-  const { nombre, precio, marca, descripcion, stock, idSerie } = req.body;
+  const { nombre, precio, marca, descripcion, stock, img, serie_id } = req.body;
 
   db.query(
-    "UPDATE Producto SET nombre = $1, precio = $2, marca = $3, descripcion = $4, stock = $5, idSerie = $6 WHERE id = $7 RETURNING *;",
-    [nombre, precio, marca, descripcion, stock, idSerie, id],
+    "UPDATE Producto SET nombre = $1, precio = $2, marca = $3, descripcion = $4, stock = $5, img = $6, serie_id = $7 WHERE id = $7 RETURNING *;",
+    [nombre, precio, marca, descripcion, stock, img, serie_id, id],
     (err, result) => {
       if (err) {
         return res.status(500).json(err);
@@ -48,11 +48,11 @@ function update(req, res) {
 }
 
 function create(req, res) {
-  const { serie_id, nombre, precio, marca, descripcion } = req.body;
+  const { serie_id, nombre, precio, marca, descripcion, img } = req.body;
 
   db.query(
-    "INSERT INTO producto (serie_id, nombre, precio, marca, descripcion) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
-    [serie_id, nombre, precio, marca, descripcion],
+    "INSERT INTO producto (serie_id, nombre, precio, marca, descripcion, img) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;",
+    [serie_id, nombre, precio, marca, descripcion, img],
     (err, result) => {
       if (err) {
         return res.status(500).json(err);

@@ -1,7 +1,8 @@
 import { db } from "../../postgres-config.js";
 
 async function findOne(req, res) {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
+
   try {
     const carritoResult = await db.query(
       "SELECT * FROM carrito WHERE id = $1",
@@ -24,8 +25,7 @@ async function findOne(req, res) {
 
     res.json({ ...carritoResult.rows[0], items: carritoItemsResult.rows });
   } catch (err) {
-    console.error("Error retrieving cart:", err);
-    res.status(500).json({ error: "Error retrieving cart" });
+    res.status(500).json({ error: "Error retrieving cart", err });
   }
 }
 
@@ -54,14 +54,27 @@ async function updateProductItem(req, res) {
       [productoId, cantidad, estado],
     );
     if (result.rowCount === 0) {
-      res.status(404).json({ message: "Product not found in in-cart items" });
+      return res.status(404).json({ message: "Product not found in in-cart items" });
     } else {
-      res.status(200);
+      const updatedItemResult = await db.query(
+        `SELECT ci.*, p.*
+         FROM carrito_items ci
+         JOIN producto p ON ci.producto_id = p.id
+         WHERE ci.producto_id = $1`,
+        [productoId],
+      );
+
+      if (updatedItemResult.rows.length === 0) {
+        return res.status(404).json({ message: "Updated product item not found" });
+      }
+
+      res.status(200).json(updatedItemResult.rows[0]);
     }
   } catch (err) {
-    res.status(500).json({ error: "Error moving product to saved" });
+    res.status(500).json({ error: "Error updating product item", err });
   }
 }
+
 
 async function removeProductFromCart(req, res) {
   const { carritoId, productoId } = req.params;

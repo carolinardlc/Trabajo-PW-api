@@ -28,17 +28,15 @@ function findOne(req, res) {
 
 function update(req, res) {
   const id = parseInt(req.params.id);
-  const { nombre } = req.body;
+  const { nombre, img } = req.body;
 
-  if (!nombre) {
-    res
-      .status(400)
-      .json({ message: "No se mandaron los siguientes campos: nombre" });
+  if (!nombre || !img) {
+    return res.status(400);
   }
 
   db.query(
-    "UPDATE series SET nombre = $1 WHERE id = $1;",
-    [nombre, id],
+    "UPDATE series SET nombre = $2 img = $3 WHERE id = $1;",
+    [id, nombre, img],
     (err, result) => {
       if (err) {
         res.status(500).json(err);
@@ -54,17 +52,15 @@ function update(req, res) {
 }
 
 function create(req, res) {
-  const { nombre } = req.body;
+  const { nombre, img } = req.body;
 
-  if (!nombre) {
-    res
-      .status(400)
-      .json({ message: "No se mandaron los siguientes campos: nombre" });
+  if (!nombre || !img) {
+    return res.status(400);
   }
 
   db.query(
-    "INSERT INTO serie (nombre) VALUES ($1) RETURNING *;",
-    [nombre],
+    "INSERT INTO serie (nombre, img) VALUES ($1, $2) RETURNING *;",
+    [nombre, img],
     (err, result) => {
       if (err) {
         res.status(500).json(err);

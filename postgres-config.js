@@ -1,8 +1,6 @@
 import pg from "pg";
 import fs from "node:fs";
 
-console.log("pg user: ", process.env.PGUSER)
-
 export const db = new pg.Pool({
   //user: "personal",
   //host: "localhost",
